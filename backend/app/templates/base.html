@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnomaLog — Log Anomaly Detector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            zinc: {
+              950: '#09090b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  {% block head %}{% endblock %}
+</head>
+<body class="h-full bg-zinc-950 text-gray-100 flex flex-col min-h-screen">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-400 transition-colors duration-200">
+          <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          </svg>
+        </div>
+        <div class="leading-none">
+          <span class="text-lg font-bold text-white group-hover:text-gray-200 transition-colors duration-200">Anoma</span><span class="text-lg font-bold text-amber-400 group-hover:text-amber-300 transition-colors duration-200">Log</span>
+          <p class="text-xs text-zinc-600 tracking-widest uppercase mt-0.5">Log Anomaly Detector</p>
+        </div>
+      </a>
+      <span class="text-xs text-zinc-600 font-mono hidden sm:block">Powered by Claude AI</span>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-800/60 bg-zinc-900/20 mt-auto">
+    <div class="max-w-6xl mx-auto px-6 py-5 text-center text-zinc-600 text-xs">
+      Powered by Claude &middot; FastAPI &middot; PostgreSQL
+    </div>
+  </footer>
+
+</body>
+</html>

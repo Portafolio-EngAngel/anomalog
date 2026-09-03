@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-br from-zinc-950 via-amber-950/20 to-zinc-950 pt-20 pb-12 px-6 text-center">
+  <div class="max-w-2xl mx-auto">
+    <span class="inline-block bg-amber-900/40 text-amber-400 border border-amber-800/50 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-6">
+      AI-Powered Analysis
+    </span>
+    <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight leading-tight">
+      Detect anomalies in your logs<br class="hidden sm:block" />
+      <span class="text-amber-400">using AI</span>
+    </h1>
+    <p class="text-gray-400 text-lg max-w-xl mx-auto leading-relaxed">
+      Upload any log file and receive an instant AI-powered security analysis — per-line classification and a full incident report.
+    </p>
+  </div>
+</section>
+
+<div class="max-w-6xl mx-auto px-6 pb-20 -mt-4">
+
+  <!-- Upload card -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-lg mx-auto shadow-2xl shadow-black/40">
+    <h2 class="text-base font-semibold text-white mb-6">Upload a log file</h2>
+
+    <!-- Error banner -->
+    <div id="error-banner" class="hidden mb-5 px-4 py-3 rounded-xl text-sm bg-red-900/40 border border-red-800/60 text-red-300 flex items-start gap-3" role="alert">
+      <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span id="error-text"></span>
+    </div>
+
+    <!-- Upload form -->
+    <div id="upload-section">
+      <form id="upload-form" class="space-y-5">
+
+        <div class="space-y-2">
+          <label for="file" class="block text-sm font-medium text-gray-300">
+            Select file <span class="text-zinc-500 font-mono text-xs">(.log, .txt, .csv)</span>
+          </label>
+          <div class="relative">
+            <input
+              id="file"
+              name="file"
+              type="file"
+              accept=".log,.txt,.csv"
+              required
+              class="block w-full text-sm text-gray-300
+                     file:mr-4 file:py-2 file:px-4
+                     file:rounded-lg file:border-0
+                     file:text-sm file:font-medium
+                     file:bg-amber-500/15 file:text-amber-400
+                     hover:file:bg-amber-500/25
+                     file:cursor-pointer file:transition-colors file:duration-200
+                     border border-zinc-700 rounded-xl
+                     bg-zinc-800/50 p-2
+                     focus:outline-none focus:ring-2 focus:ring-amber-500/60
+                     hover:border-zinc-600 transition-colors duration-200"
+            />
+          </div>
+          <p class="text-xs text-zinc-600">Max 500 lines will be analyzed to control AI costs.</p>
+        </div>
+
+        <button
+          id="submit-btn"
+          type="submit"
+          class="w-full bg-amber-500 hover:bg-amber-400 active:scale-95 hover:scale-[1.01] disabled:bg-amber-500/25 disabled:cursor-not-allowed
+                 text-black font-semibold py-3 px-6 rounded-xl
+                 transition-all duration-200 shadow-lg shadow-amber-900/20
+                 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-zinc-900
+                 flex items-center justify-center gap-2"
+        >
+          <span id="submit-label">Analyze Log File</span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Polling progress -->
+    <div id="progress-section" class="hidden text-center space-y-5">
+      <div class="flex justify-center">
+        <div class="relative">
+          <div class="w-12 h-12 rounded-full border-2 border-zinc-800"></div>
+          <div class="absolute inset-0 w-12 h-12 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+      <div>
+        <p class="text-white font-semibold text-sm">Analyzing your log file…</p>
+        <p class="text-zinc-500 text-xs mt-1">AI classification usually takes 10–30 seconds.</p>
+      </div>
+      <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+        <div id="progress-bar" class="h-full bg-amber-500 rounded-full transition-all duration-1000" style="width: 5%"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Feature pills -->
+  <div class="flex flex-wrap justify-center gap-3 mt-10">
+    <span class="px-4 py-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-full text-sm text-gray-400 transition-colors duration-200 flex items-center gap-2">
+      <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      AI Classification
+    </span>
+    <span class="px-4 py-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-full text-sm text-gray-400 transition-colors duration-200 flex items-center gap-2">
+      <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      Async Analysis
+    </span>
+    <span class="px-4 py-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-full text-sm text-gray-400 transition-colors duration-200 flex items-center gap-2">
+      <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      Incident Report
+    </span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const form            = document.getElementById('upload-form');
+  const submitBtn       = document.getElementById('submit-btn');
+  const submitLabel     = document.getElementById('submit-label');
+  const uploadSection   = document.getElementById('upload-section');
+  const progressSection = document.getElementById('progress-section');
+  const progressBar     = document.getElementById('progress-bar');
+  const errorBanner     = document.getElementById('error-banner');
+  const errorText       = document.getElementById('error-text');
+
+  let pollTimer   = null;
+  let fakePercent = 5;
+
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorBanner.classList.remove('hidden');
+    uploadSection.classList.remove('hidden');
+    progressSection.classList.add('hidden');
+  }
+
+  function hideError() {
+    errorBanner.classList.add('hidden');
+  }
+
+  function setUploading(active) {
+    submitBtn.disabled = active;
+    submitLabel.textContent = active ? 'Uploading…' : 'Analyze Log File';
+  }
+
+  function startProgressAnimation() {
+    fakePercent = 5;
+    progressBar.style.width = fakePercent + '%';
+    pollTimer = setInterval(() => {
+      if (fakePercent < 85) {
+        fakePercent += Math.random() * 4;
+        progressBar.style.width = Math.min(fakePercent, 85) + '%';
+      }
+    }, 1500);
+  }
+
+  function stopProgress() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    progressBar.style.width = '100%';
+  }
+
+  async function pollStatus(analysisId) {
+    const INTERVAL = 2000;
+    const MAX_ATTEMPTS = 90;
+    let attempts = 0;
+
+    return new Promise((resolve, reject) => {
+      const timer = setInterval(async () => {
+        attempts++;
+        if (attempts > MAX_ATTEMPTS) {
+          clearInterval(timer);
+          reject(new Error('Analysis is taking longer than expected. Please try again.'));
+          return;
+        }
+        try {
+          const res = await fetch('/analyses/' + analysisId);
+          if (!res.ok) { clearInterval(timer); reject(new Error('Could not retrieve analysis status.')); return; }
+          const data = await res.json();
+          if (data.status === 'completed') { clearInterval(timer); resolve(analysisId); }
+          else if (data.status === 'failed') { clearInterval(timer); reject(new Error('Analysis failed. The file may be empty or unreadable.')); }
+        } catch (err) {
+          clearInterval(timer);
+          reject(new Error('Network error while checking status. Please try again.'));
+        }
+      }, INTERVAL);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const fileInput = document.getElementById('file');
+    if (!fileInput.files || fileInput.files.length === 0) {
+      showError('Please select a file before submitting.');
+      return;
+    }
+
+    setUploading(true);
+    uploadSection.classList.remove('hidden');
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    let analysisId;
+    try {
+      const res = await fetch('/analyses/', { method: 'POST', body: formData });
+      if (!res.ok) {
+        let detail = 'Upload failed. Please try again.';
+        try { const body = await res.json(); detail = body.detail || detail; } catch (_) {}
+        showError(detail);
+        setUploading(false);
+        return;
+      }
+      const body = await res.json();
+      analysisId = body.id;
+    } catch (_) {
+      showError('Network error during upload. Is the server running?');
+      setUploading(false);
+      return;
+    }
+
+    uploadSection.classList.add('hidden');
+    progressSection.classList.remove('hidden');
+    startProgressAnimation();
+
+    try {
+      await pollStatus(analysisId);
+      stopProgress();
+      window.location.href = '/analyses/' + analysisId;
+    } catch (err) {
+      stopProgress();
+      setUploading(false);
+      showError(err.message);
+    }
+  });
+})();
+</script>
+{% endblock %}
