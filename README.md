@@ -16,6 +16,7 @@ A log anomaly detector that uses Claude AI to classify every line of a log file 
 
 ```bash
 # 1. Clone and enter the project
+git clone https://github.com/Portafolio-EngAngel/anomalog.git
 cd anomalog
 
 # 2. Set your Anthropic API key
